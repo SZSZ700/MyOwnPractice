@@ -3,9 +3,8 @@ package org.example.T2026A;
 import org.example.BinNode;
 import org.example.Node;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @SuppressWarnings("ALL")
@@ -1046,6 +1045,528 @@ public class TESTA {
             // return the head of the updated list
             return list;
         };
-
     }
+
+    // Question 7
+    public static void Q7() {
+
+        // --------------------------------------------------
+        // Main idea
+        // --------------------------------------------------
+        //
+        // Employee contains check(Employee).
+        //
+        // Manager defines check(Manager).
+        // This is OVERLOADING, not overriding,
+        // because the parameter type is different.
+        //
+        // Intern defines check(Employee).
+        // This IS OVERRIDING,
+        // because the method signature is the same.
+
+
+        // --------------------------------------------------
+        // Employee class
+        // --------------------------------------------------
+
+        class Employee {
+
+            private int seniority;
+
+            public Employee(int seniority) {
+                this.seniority = seniority;
+            }
+
+            public int getSeniority() {
+                return this.seniority;
+            }
+
+            public boolean check(Employee e) {
+                System.out.println("EmpCheck");
+                return this.seniority > e.seniority;
+            }
+        }
+
+
+        // --------------------------------------------------
+        // Manager class
+        // --------------------------------------------------
+
+        class Manager extends Employee {
+
+            public Manager(int seniority) {
+                super(seniority);
+            }
+
+            // This is NOT overriding check(Employee).
+            // This is overloading because the parameter is Manager.
+            public boolean check(Manager m) {
+                System.out.println("MgrCheck");
+                return this.getSeniority() == m.getSeniority();
+            }
+        }
+
+
+        // --------------------------------------------------
+        // Intern class
+        // --------------------------------------------------
+
+        class Intern extends Employee {
+
+            private int mentorId;
+
+            public Intern(int seniority, int mentorId) {
+                super(seniority);
+                this.mentorId = mentorId;
+            }
+
+            // This overrides Employee.check(Employee).
+            @Override
+            public boolean check(Employee e) {
+
+                System.out.println("IntCheck");
+
+                // if e is not an Intern,
+                // return true
+                if (!(e instanceof Intern)) {
+                    return true;
+                }
+
+                // cast e to Intern
+                Intern other = (Intern)e;
+
+                // return true only if both Intern objects
+                // have the same mentorId
+                return this.mentorId == other.mentorId;
+            }
+        }
+
+
+        // --------------------------------------------------
+        // Objects from main
+        // --------------------------------------------------
+
+        Employee e1 = new Manager(15);
+
+        Manager m1 = new Manager(15);
+
+        Employee e2 = new Employee(10);
+
+        Employee i1 = new Intern(2, 800);
+
+        Intern i2 = new Intern(2, 900);
+
+        Intern i3 = new Intern(5, 800);
+
+
+        // --------------------------------------------------
+        // 1
+        // --------------------------------------------------
+        //
+        // e1 is declared as Employee.
+        // Employee.check(Employee) is selected.
+        //
+        // Manager does not override check(Employee).
+        //
+        // 15 > 15 -> false
+        //
+        // Output:
+        // EmpCheck
+        // false
+
+        System.out.println(e1.check(m1));
+
+
+        // --------------------------------------------------
+        // 2
+        // --------------------------------------------------
+        //
+        // m1 is Manager,
+        // but e1 is declared as Employee.
+        //
+        // check(Manager) cannot receive an Employee reference.
+        //
+        // Therefore Employee.check(Employee) is selected.
+        //
+        // 15 > 15 -> false
+        //
+        // Output:
+        // EmpCheck
+        // false
+
+        System.out.println(m1.check(e1));
+
+
+        // --------------------------------------------------
+        // 3
+        // --------------------------------------------------
+        //
+        // m1 is Manager
+        // and the argument is also Manager.
+        //
+        // Therefore Manager.check(Manager) is selected.
+        //
+        // 15 == 15 -> true
+        //
+        // Output:
+        // MgrCheck
+        // true
+
+        System.out.println(m1.check(m1));
+
+
+        // --------------------------------------------------
+        // 4
+        // --------------------------------------------------
+        //
+        // i1 is declared as Employee,
+        // but the actual object is Intern.
+        //
+        // Intern overrides check(Employee),
+        // therefore Intern.check(Employee) runs.
+        //
+        // e2 is not an Intern,
+        // so the method returns true.
+        //
+        // Output:
+        // IntCheck
+        // true
+
+        System.out.println(i1.check(e2));
+
+
+        // --------------------------------------------------
+        // 5
+        // --------------------------------------------------
+        //
+        // i1 actual object:
+        // Intern(seniority = 2, mentorId = 800)
+        //
+        // i2:
+        // Intern(seniority = 2, mentorId = 900)
+        //
+        // 800 == 900 -> false
+        //
+        // Output:
+        // IntCheck
+        // false
+
+        System.out.println(i1.check(i2));
+
+
+        // --------------------------------------------------
+        // 6
+        // --------------------------------------------------
+        //
+        // i1 mentorId = 800
+        // i3 mentorId = 800
+        //
+        // 800 == 800 -> true
+        //
+        // Output:
+        // IntCheck
+        // true
+
+        System.out.println(i1.check(i3));
+
+
+        // --------------------------------------------------
+        // 7
+        // --------------------------------------------------
+        //
+        // e2 is an actual Employee object.
+        //
+        // Employee.check(Employee) runs.
+        //
+        // e2 seniority = 10
+        // i1 seniority = 2
+        //
+        // 10 > 2 -> true
+        //
+        // Output:
+        // EmpCheck
+        // true
+
+        System.out.println(e2.check(i1));
+
+
+        // --------------------------------------------------
+        // Summary
+        // --------------------------------------------------
+        //
+        // 1)
+        // EmpCheck
+        // false
+        //
+        // 2)
+        // EmpCheck
+        // false
+        //
+        // 3)
+        // MgrCheck
+        // true
+        //
+        // 4)
+        // IntCheck
+        // true
+        //
+        // 5)
+        // IntCheck
+        // false
+        //
+        // 6)
+        // IntCheck
+        // true
+        //
+        // 7)
+        // EmpCheck
+        // true
+
+
+        // --------------------------------------------------
+        // Part B
+        // --------------------------------------------------
+        //
+        // Given:
+        //
+        // i1.check(XXX);
+        //
+        // We want:
+        //
+        // IntCheck
+        // false
+        //
+        // i1 is an actual Intern object,
+        // therefore Intern.check(Employee) runs.
+        //
+        // To return false,
+        // XXX must be an Intern with a different mentorId.
+        //
+        // i1 mentorId = 800
+        // i2 mentorId = 900
+        // i3 mentorId = 800
+        //
+        // Therefore:
+        //
+        // XXX = i2
+
+        // Example:
+        // System.out.println(i1.check(i2));
+    }
+
+    // 8
+    // a
+    public static Node<Integer> first(Node<Integer> ch, int x){
+        if(ch == null) return new Node<Integer>(x);
+        ch.setNext(first(ch.getNext(), x));
+        return ch;
+    }
+
+    // a - 1
+    // first(ch, 3)
+    // 8 -> 7 -> 9 -> 15  |->|  8 -> 7 -> 9 -> 15 -> 3
+
+    // a - 2
+    // add new node to the end of the list
+
+    // b
+    public static Node<Integer> first_1(Node<Integer> ch, int x){
+        // if the list is empty,
+        // create and return a new node
+        if (ch == null) { return new Node<Integer>(x); }
+
+        // keep the original head
+        Node<Integer> head = ch;
+
+        // move to the last node
+        while (ch.getNext() != null) { ch = ch.getNext(); }
+
+        // add the new node at the end
+        ch.setNext(new Node<Integer>(x));
+
+        // return the original head
+        return head;
+    }
+    // Recursive version: O(n)
+    // Iterative version: O(n)
+
+    // c
+    // --------------------------------------------------
+    // second
+    // --------------------------------------------------
+    //
+    // This function receives the root of a binary tree
+    // and a positive integer k.
+    //
+    // It returns a linked list containing the values
+    // of all nodes whose distance from the root
+    // is exactly k edges.
+    //
+    // The nodes are added from left to right.
+    //
+    // Example:
+    // second(bt, 3)
+    //
+    // For the tree in the question:
+    //
+    //                    7
+    //                  /   \
+    //                 4     5
+    //                / \     \
+    //               1   7     2
+    //                    \   / \
+    //                     6 2   3
+    //                       /
+    //                      6
+    //
+    // The nodes at distance 3 from the root are:
+    //
+    // 6, 2, 3
+    //
+    // Therefore the returned list is:
+    //
+    // 6 -> 2 -> 3
+    public static Node<Integer> second(BinNode<Integer> bt, int k) {
+        // create the list using the recursive helper function
+        Node<Integer> list = third(bt, null, k);
+        // return the head of the created list
+        return list;
+    }
+
+
+    // --------------------------------------------------
+    // third
+    // --------------------------------------------------
+    //
+    // Recursive helper function for second.
+    //
+    // The function goes down the binary tree.
+    // Every recursive call decreases k by 1.
+    //
+    // When k reaches 0, the current node is exactly
+    // at the requested distance from the root.
+    //
+    // Its value is then added to the END of the list
+    // using first().
+    public static Node<Integer> third(BinNode<Integer> bt, Node<Integer> list, int k) {
+        // continue only if the current tree node exists
+        if (bt != null) {
+            // if we have not yet reached
+            // the requested distance
+            if (k > 0) {
+                // search the left subtree, one level deeper
+                list = third(bt.getLeft(), list, k - 1);
+                // search the right subtree, one level deeper
+                list = third(bt.getRight(), list, k - 1);
+            }
+
+            // k == 0 means that the current node
+            // is exactly at the requested distance
+            // add the current node's value
+            // to the end of the linked list
+            else { list = first(list, bt.getValue()); }
+        }
+
+        return list; // return the updated list
+    }
+
+    // c - 1 - 2
+    // --------------------------------------------------
+    // Answer for second(bt, 3)
+    // --------------------------------------------------
+    // third starts from:
+    // root -> k = 3
+    //
+    // After going down one level:
+    // level 1 -> k = 2
+    //
+    // After going down another level:
+    // level 2 -> k = 1
+    //
+    // After going down another level:
+    // level 3 -> k = 0
+    // When k == 0, the values are added to the list.
+    //
+    // The nodes at distance 3 are:
+    // 6, 2, 3
+    //
+    // Therefore:
+    // second(bt, 3)
+    // returns:
+    // 6 -> 2 -> 3 -> null
+
+    // --------------------------------------------------
+    // What does second do in general?
+    // --------------------------------------------------
+    // second(bt, k) returns a linked list containing
+    // the values of all nodes whose distance from
+    // the root of the binary tree is exactly k edges.
+    // The values are inserted into the list
+    // from left to right.
+
+
+    // c - 3
+    //
+    // This function receives the root of a binary tree
+    // and an integer k.
+    //
+    // It uses BFS to traverse the tree level by level,
+    // creates a linked list containing the values of the nodes at each level,
+    // and returns the list that represents level k.
+    //
+    // Time Complexity: O(n)
+    // Space Complexity: O(n)
+    BiFunction<BinNode<Integer>, Integer, Node<Integer>> third_b = (root, k) -> {
+        // if the tree is empty, return null
+        if (root == null) return null;
+
+        // create a deque for BFS traversal
+        var searchDeque = new ArrayDeque<BinNode<Integer>>();
+        // offer the root node to the deque
+        searchDeque.offer(root);
+
+        // create a map to store the linked list that represents each level
+        var map = new LinkedHashMap<Integer, Node<Integer>>();
+        // current level in the tree
+        var level = 0;
+
+        // iterate through the tree level by level
+        while (!searchDeque.isEmpty()) {
+            // number of nodes in the current level
+            var size = searchDeque.size();
+            // head of the linked list that represents the current level
+            Node<Integer> neweyHead = null;
+            // tail of the linked list that represents the current level
+            Node<Integer> neweyTail = null;
+
+            // iterate through all nodes in the current level
+            for (int i = 0; i < size; i++) {
+                // get the next node from the current level
+                var currentBin = searchDeque.poll();
+
+                // if the current level list is empty, create its first node
+                if (neweyHead == null) { neweyHead = neweyTail = new Node<>(currentBin.getValue()); }
+                // otherwise, add the current value to the end of the level list
+                else {
+                    neweyTail.setNext(new Node<>(currentBin.getValue()));
+                    neweyTail = neweyTail.getNext();
+                }
+
+                // add the left child to the next BFS level
+                if (currentBin.getLeft() != null) { searchDeque.offer(currentBin.getLeft()); }
+                // add the right child to the next BFS level
+                if (currentBin.getRight() != null) { searchDeque.offer(currentBin.getRight()); }
+            }
+
+            // store the linked list that represents the current level
+            map.put(level++, neweyHead);
+        }
+
+        // get the linked list that represents level k
+        // if level k does not exist, return null
+        var chain = map.getOrDefault(k, null);
+
+        // return the values of all nodes at level k
+        return chain;
+    };
 }
