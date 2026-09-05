@@ -1718,33 +1718,55 @@ public class TESTA {
             public void setSessions(Node<Session> sessions) { this.sessions = sessions; }
 
             // 9 - c
+            // This helper function checks whether a participant
+            // is NOT registered in any critical session.
+            //
+            // Returns true if the participant is not registered
+            // in any critical session.
+            //
+            // Returns false if the participant is already registered
+            // in at least one critical session.
             private boolean theParticipantIsNotRegisteredToAnyCriticalSession(String participant){
-                // pointer to the sessions linked list
+                // pointer used to iterate through the sessions linked list
                 var pos = this.sessions;
 
-                // iterate over the sessions linked list
+                // iterate through all sessions
                 while(pos != null){
-                    // current session
+                    // get the current session
                     var currentSession = pos.getValue();
-                    // check if this session is critical
+                    // check whether the current session is critical
                     var isCritical = currentSession.getIsCritical();
 
-                    // if this session is critical check that the participants is not allready registerd to it
+                    // if the current session is critical,
+                    // check whether the participant is already registered in it
                     if(isCritical){
+                        // temporary queue used to restore the participants queue
                         var temp = new LinkedList<String>();
+                        // flag that indicates whether the participant already exists
                         var allreadyExists = false;
-                        // check
+                        // get the participants queue of the current session
                         var participants = currentSession.getParticipants();
+
+                        // iterate through all participants in the current session
                         while (!participants.isEmpty()){
+                            // remove the current participant from the queue
                             var currentParticipant = participants.poll();
-                            // check if the current participant is the same as the participant we are looking for
-                            if(currentParticipant.equals(participant)){ allreadyExists = true; }
-                            // add the current participant to the temp restoration queue
+
+                            // check whether this is the participant we are looking for
+                            if(currentParticipant.equals(participant)){
+                                allreadyExists = true;
+                            }
+
+                            // store the participant in the temporary queue
+                            // so the original queue can be restored later
                             temp.offer(currentParticipant);
                         }
+
                         // restore the original participants queue
                         while (!temp.isEmpty()){ participants.offer(temp.poll()); }
-                        // if the participant is allready registered to the session return false
+
+                        // if the participant is already registered
+                        // in a critical session, return false
                         if(allreadyExists){ return false; }
                     }
 
@@ -1752,58 +1774,74 @@ public class TESTA {
                     pos = pos.getNext();
                 }
 
-                // return true if the participant was not registered to any session
+                // the participant was not found in any critical session
                 return true;
             }
 
+
+            // This function tries to register a participant
+            // to a specific session.
+            //
+            // If the desired session is critical,
+            // the participant can register only if they are not
+            // already registered in another critical session.
+            //
+            // The function uses registerParticipant()
+            // to perform the actual registration.
+            //
+            // Returns true if the registration succeeds.
+            // Returns false otherwise.
             public boolean tryRegister(String nameSession, String name){
-                // pointer for iteration through the sessions linked list
+                // pointer used to iterate through the sessions linked list
                 var pos = this.sessions;
 
-                // iteration through the sessions linked list
+                // iterate through all sessions
                 while (pos != null){
-                    // keep track of the current session
+                    // get the current session
                     var currentSession = pos.getValue();
-                    // keep track of the current session name
+                    // get the current session name
                     var sessionName = currentSession.getNameSession();
-                    // keep track of the current session criticality
+                    // check whether the current session is critical
                     var isCritical = currentSession.getIsCritical();
 
-                    // if this current session is critical
+                    // if this is the desired session and it is critical
                     if (isCritical && nameSession.equals(sessionName)){
-                        // check if the participant is not registered to any critical session in the conference
+                        // check whether the participant is already registered
+                        // in another critical session
                         if (!this.theParticipantIsNotRegisteredToAnyCriticalSession(name)){
                             System.out.println("Participant is already registered to a critical session");
                             return false;
                         }
-                        // if this current session is critical and the participant
-                        // is not registered to any critical session in the conference
-                        // try to register the participant to the desired session
+                        // if the participant is allowed to register
+                        // to this critical session
                         else{
-                            // register the participant to the session
+                            // try to register the participant
                             var isRegisterd = currentSession.registerParticipant(name);
-                            // return true if the participant was registered to the session
+
+                            // if registration succeeded, return true
                             if (isRegisterd){
                                 System.out.println("The participant registered successfully to the desired session");
                                 return true;
                             }
-                            // else if the participant was not registered to the session
-                            System.out.println(
-                                    "Participant was not registered to it's desired session" +
-                                    "because it is full"
-                            );
+
+                            // registration failed
+                            System.out.println("Participant was not registered to its desired session " + "because the registration is not possible");
                             return false;
                         }
-                    }else if (!isCritical && nameSession.equals(sessionName)){
+                    }
+                    // if this is the desired session and it is not critical
+                    else if (!isCritical && nameSession.equals(sessionName)){
+                        // try to register the participant
                         var isRegistered = currentSession.registerParticipant(name);
+
+                        // if registration succeeded, return true
                         if (isRegistered){
                             System.out.println("The participant registered successfully to the desired session");
                             return true;
                         }
-                        System.out.println(
-                                "Participant was not registered to it's desired session" +
-                                "because it is full"
-                        );
+
+                        // registration failed
+                        System.out.println("Participant was not registered to its desired session " + "because the registration is not possible");
                         return false;
                     }
 
@@ -1811,10 +1849,10 @@ public class TESTA {
                     pos = pos.getNext();
                 }
 
+                // if the loop ended without finding the desired session,
+                // the session does not exist
                 System.out.println("Participant was not registered to the desired session");
-                // if the participant was not registered to the desired session
-                // it's mean that the session does not exist
-                // return false
+                // registration failed
                 return false;
             }
         }
