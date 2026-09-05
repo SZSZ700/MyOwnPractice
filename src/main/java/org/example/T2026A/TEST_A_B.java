@@ -5,7 +5,7 @@ import org.example.Node;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -2118,31 +2118,58 @@ public class TEST_A_B {
         return !somthingOff.get();
     }
 
-    // Returns the first index of num in the queue.
-    // Returns -1 if num does not exist in the queue.
-    private static int indexOfNumInQueue(Queue<Integer> q, Integer num){
-        // current index while iterating through the queue
-        var index = new AtomicInteger(0);
-        // stores the first index where num was found
-        // -1 means that the number was not found
-        var finalIndex = new AtomicInteger(-1);
-        // flag that prevents changing finalIndex
-        // after the first occurrence was found
-        var found = new AtomicBoolean(false);
+    private static boolean allFromQ1InQ2InOrder(Queue<Integer> q1, Queue<Integer> q2){
+        BiConsumer<Queue<Integer>, Queue<Integer>> restoreQueue = (queue, temp) -> {
+            // Move the remaining elements to the temporary queue
+            while (!queue.isEmpty()){ temp.offer(queue.poll()); }
+            // Restore all elements back to the original queue
+            while (!temp.isEmpty()){ queue.offer(temp.poll()); }
+        };
 
-        // iterate through all elements in the queue
-        q.forEach(n -> {
-            // save only the first occurrence of num
-            if (n.equals(num) && !found.get()){
-                finalIndex.set(index.get());
-                found.set(true);
+        // Temporary queues used to restore q1 and q2
+        var t1 = new LinkedList<Integer>();
+        var t2 = new LinkedList<Integer>();
+
+        // Go over all values in q1
+        while (!q1.isEmpty()){
+            // Take the current value from q1
+            var num1 = q1.poll();
+            // Save it so q1 can be restored later
+            t1.offer(num1);
+            // Indicates whether num1 was found in q2
+            var found = false;
+
+            // Search for num1 in q2
+            // The search continues from where the previous search stopped,
+            // so the order is preserved
+            while (!q2.isEmpty()){
+                // Take the next value from q2
+                var num2 = q2.poll();
+                // Save it so q2 can be restored later
+                t2.offer(num2);
+                // Current value from q1 was found
+                if (num1.equals(num2)){
+                    found = true;
+                    break;
+                }
             }
-            // move to the next index
-            index.getAndIncrement();
-        });
 
-        // return the first index of num,
-        // or -1 if num does not exist
-        return finalIndex.get();
+            // If num1 was not found, the values are not in the same order
+            if (!found) {
+                // Restore both original queues
+                restoreQueue.accept(q1, t1);
+                restoreQueue.accept(q2, t2);
+                return false;
+            }
+        }
+
+        // Restore both original queues
+        restoreQueue.accept(q1, t1);
+        restoreQueue.accept(q2, t2);
+        // All values from q1 were found in q2 in the same order
+        return true;
+    }
+
+    public static void main(String[] args) {
     }
 }
