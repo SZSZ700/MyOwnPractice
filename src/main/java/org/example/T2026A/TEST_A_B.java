@@ -1,8 +1,6 @@
 package org.example.T2026A;
-
 import org.example.BinNode;
 import org.example.Node;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
@@ -77,6 +75,8 @@ public class TEST_A_B {
             // current > next:
             // reached the point where the sequence starts descending
             else {
+                // the first descending comparison was already found
+                goDown = true;
                 temp.push(current);
                 break;
             }
@@ -385,12 +385,15 @@ public class TEST_A_B {
             // constructor that receives
             // both model name and battery level
             public AutonomousCar(String modelName, double batteryLevel) {
+                this.modelName = modelName;
+                this.batteryLevel = batteryLevel;
             }
 
 
             // constructor that receives
             // only the model name
             public AutonomousCar(String modelName) {
+                this.modelName = modelName;
             }
 
 
@@ -2173,3 +2176,4 @@ public class TEST_A_B {
     public static void main(String[] args) {
     }
 }
+
