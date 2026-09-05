@@ -1569,4 +1569,254 @@ public class TESTA {
         // return the values of all nodes at level k
         return chain;
     };
+
+    // Question 9 - a
+    public static void Q9() {
+        // --------------------------------------------------
+        // Session class
+        // --------------------------------------------------
+        // Represents a session in the conference.
+        // Each session contains:
+        // - the session name
+        // - a queue of participant names
+        // - the maximum capacity
+        // - the current number of participants
+        // - a flag that indicates whether the session is critical
+        // A session is considered critical when
+        // fewer than 5 available places remain.
+        class Session {
+            // name of the session
+            private String nameSession;
+            // queue that stores the names of the participants
+            private Queue<String> participants;
+            // maximum number of participants allowed in the session
+            private int maxCapacity;
+            // current number of participants in the session
+            private int numParticipants;
+            // true if fewer than 5 available places remain
+            private boolean isCritical;
+
+            // 9 - a
+            // Constructor
+            // Receives the session name and its maximum capacity.
+            // The session is initialized with no participants.
+            public Session(String nameSession, int maxCapacity) {
+                // initialize the session name
+                this.nameSession = nameSession;
+                // initialize the maximum capacity
+                this.maxCapacity = maxCapacity;
+                // create an empty participants queue
+                this.participants = new LinkedList<String>();
+                // the session starts with no participants
+                this.numParticipants = 0;
+                // determine whether the session is critical
+                // fewer than 5 available places means critical
+                this.isCritical = (this.maxCapacity - this.numParticipants) < 5;
+            }
+
+            // returns the session name
+            public String getNameSession() { return this.nameSession; }
+            // updates the session name
+            public void setNameSession(String nameSession) { this.nameSession = nameSession; }
+            // returns the participants queue
+            public Queue<String> getParticipants() { return this.participants; }
+            // updates the participants queue
+            public void setParticipants(Queue<String> participants) { this.participants = participants; }
+            // returns the maximum capacity
+            public int getMaxCapacity() { return this.maxCapacity; }
+            // updates the maximum capacity
+            public void setMaxCapacity(int maxCapacity) { this.maxCapacity = maxCapacity; }
+            // returns the current number of participants
+            public int getNumParticipants() { return this.numParticipants; }
+            // updates the current number of participants
+            public void setNumParticipants(int numParticipants) { this.numParticipants = numParticipants; }
+            // returns true if the session is critical
+            public boolean getIsCritical() { return this.isCritical; }
+            // updates the critical status of the session
+            public void setIsCritical(boolean isCritical) { this.isCritical = isCritical; }
+
+            // 9 - b
+            // Tries to register a participant to this session.
+            // Registration is possible only if:
+            // 1. There is an available place.
+            // 2. The participant is not already registered.
+            //
+            // If registration succeeds:
+            // - the participant is added to the end of the queue
+            // - numParticipants is updated
+            // - isCritical is updated
+            // - true is returned
+            //
+            // Otherwise, an appropriate message is printed
+            // and false is returned.
+            //
+            // Time Complexity: O(n)
+            // Space Complexity: O(n)
+            public boolean registerParticipant(String name){
+                // check if the session is already full
+                if (this.numParticipants >= this.maxCapacity){
+                    System.out.println("The session is full");
+                    return false;
+                }
+
+                // flag that indicates whether the participant already exists
+                var exist = false;
+                // temporary queue used to preserve the participants queue
+                var temp = new LinkedList<String>();
+
+                // iterate through all participants
+                while (!this.participants.isEmpty()){
+                    // remove the current participant
+                    var participant = this.participants.poll();
+                    // check if this participant is already registered
+                    if (participant.equals(name)){ exist = true; }
+                    // save the participant in the temporary queue
+                    temp.offer(participant);
+                }
+
+                // restore the original participants queue
+                while (!temp.isEmpty()){ this.participants.offer(temp.poll()); }
+
+                // if the participant already exists, registration is not allowed
+                if (exist){
+                    System.out.println("Participant is already registered to this session");
+                    return false;
+                }
+
+                // add the participant to the end of the queue
+                this.participants.offer(name);
+                // update the number of participants
+                this.numParticipants++;
+                // update whether the session is critical
+                this.isCritical = (this.maxCapacity - this.numParticipants) < 5;
+
+                // registration succeeded
+                return true;
+            }
+        }
+
+        // --------------------------------------------------
+        // ConferenceManager class
+        // --------------------------------------------------
+        // Represents the conference management system.
+        // It contains:
+        // - the conference name
+        // - a linked list of conference sessions
+        class ConferenceManager {
+            // name of the conference
+            private String nameConference;
+            // linked list containing the conference sessions
+            private Node<Session> sessions;
+
+            // returns the conference name
+            public String getNameConference() { return this.nameConference; }
+            // updates the conference name
+            public void setNameConference(String nameConference) { this.nameConference = nameConference; }
+            // returns the linked list of sessions
+            public Node<Session> getSessions() { return this.sessions; }
+            // updates the linked list of sessions
+            public void setSessions(Node<Session> sessions) { this.sessions = sessions; }
+
+            // 9 - c
+            private boolean theParticipantIsNotRegisteredToAnyCriticalSession(String participant){
+                // pointer to the sessions linked list
+                var pos = this.sessions;
+
+                // iterate over the sessions linked list
+                while(pos != null){
+                    // current session
+                    var currentSession = pos.getValue();
+                    // check if this session is critical
+                    var isCritical = currentSession.getIsCritical();
+
+                    // if this session is critical check that the participants is not allready registerd to it
+                    if(isCritical){
+                        var temp = new LinkedList<String>();
+                        var allreadyExists = false;
+                        // check
+                        var participants = currentSession.getParticipants();
+                        while (!participants.isEmpty()){
+                            var currentParticipant = participants.poll();
+                            // check if the current participant is the same as the participant we are looking for
+                            if(currentParticipant.equals(participant)){ allreadyExists = true; }
+                            // add the current participant to the temp restoration queue
+                            temp.offer(currentParticipant);
+                        }
+                        // restore the original participants queue
+                        while (!temp.isEmpty()){ participants.offer(temp.poll()); }
+                        // if the participant is allready registered to the session return false
+                        if(allreadyExists){ return false; }
+                    }
+
+                    // move to the next session
+                    pos = pos.getNext();
+                }
+
+                // return true if the participant was not registered to any session
+                return true;
+            }
+
+            public boolean tryRegister(String nameSession, String name){
+                // pointer for iteration through the sessions linked list
+                var pos = this.sessions;
+
+                // iteration through the sessions linked list
+                while (pos != null){
+                    // keep track of the current session
+                    var currentSession = pos.getValue();
+                    // keep track of the current session name
+                    var sessionName = currentSession.getNameSession();
+                    // keep track of the current session criticality
+                    var isCritical = currentSession.getIsCritical();
+
+                    // if this current session is critical
+                    if (isCritical && nameSession.equals(sessionName)){
+                        // check if the participant is not registered to any critical session in the conference
+                        if (!this.theParticipantIsNotRegisteredToAnyCriticalSession(name)){
+                            System.out.println("Participant is already registered to a critical session");
+                            return false;
+                        }
+                        // if this current session is critical and the participant
+                        // is not registered to any critical session in the conference
+                        // try to register the participant to the desired session
+                        else{
+                            // register the participant to the session
+                            var isRegisterd = currentSession.registerParticipant(name);
+                            // return true if the participant was registered to the session
+                            if (isRegisterd){
+                                System.out.println("The participant registered successfully to the desired session");
+                                return true;
+                            }
+                            // else if the participant was not registered to the session
+                            System.out.println(
+                                    "Participant was not registered to it's desired session" +
+                                    "because it is full"
+                            );
+                            return false;
+                        }
+                    }else if (!isCritical && nameSession.equals(sessionName)){
+                        var isRegistered = currentSession.registerParticipant(name);
+                        if (isRegistered){
+                            System.out.println("The participant registered successfully to the desired session");
+                            return true;
+                        }
+                        System.out.println(
+                                "Participant was not registered to it's desired session" +
+                                "because it is full"
+                        );
+                        return false;
+                    }
+
+                    // move to the next session
+                    pos = pos.getNext();
+                }
+
+                System.out.println("Participant was not registered to the desired session");
+                // if the participant was not registered to the desired session
+                // it's mean that the session does not exist
+                // return false
+                return false;
+            }
+        }
+    }
 }
