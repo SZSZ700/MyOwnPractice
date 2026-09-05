@@ -4,11 +4,13 @@ import org.example.BinNode;
 import org.example.Node;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @SuppressWarnings("ALL")
-public class TESTA {
+public class TEST_A_B {
     // 1 - O(n)
 // O(n)
     public static boolean isUpDown(Stack<Integer> stk) {
@@ -149,7 +151,7 @@ public class TESTA {
     }
 
     // 2 - a - O(n)
-    public static int valueAt(Node<Integer> ch, int pos){
+    public static int valueAt(Node<Integer> ch, int pos) {
 
         // validate that pos is positive
         // and that the linked list is not empty
@@ -164,7 +166,7 @@ public class TESTA {
         var count = 1;
 
         // go through the linked list
-        while (ch != null){
+        while (ch != null) {
 
             // get the value of the current node
             var value = ch.getValue();
@@ -191,9 +193,9 @@ public class TESTA {
     //
     // Time Complexity: O(n)
     // Space Complexity: O(n)
-    private static <T> BinNode<T> makeBinFromNod(Node<T> chain){
+    private static <T> BinNode<T> makeBinFromNod(Node<T> chain) {
         // if the original list is empty, return null
-        if(chain == null) return null;
+        if (chain == null) return null;
 
         // create head pointer to the new doubly linked list
         BinNode<T> newey = null;
@@ -205,21 +207,21 @@ public class TESTA {
         var pos = chain;
 
         // iterate through the singly linked list
-        while(pos != null){
+        while (pos != null) {
 
             // create a new node with the current value
             var toAdd = new BinNode<>(pos.getValue());
 
             // if the new list is empty,
             // set both head and tail to the new node
-            if(newey == null){
+            if (newey == null) {
                 newey = toAdd;
                 tail = toAdd;
             }
 
             // if the new list is not empty,
             // connect the new node to the end of the list
-            else{
+            else {
 
                 // connect the current tail to the new node
                 tail.setRight(toAdd);
@@ -248,7 +250,7 @@ public class TESTA {
     //
     // Time Complexity: O(n)
     // Space Complexity: O(n)
-    public static Node<Integer> merge(Node<Integer> ch1, Node<Integer> ch2){
+    public static Node<Integer> merge(Node<Integer> ch1, Node<Integer> ch2) {
         // if one of the lists is empty, return null
         if (ch1 == null || ch2 == null) return null;
 
@@ -256,7 +258,7 @@ public class TESTA {
         var reversedSecChain = makeBinFromNod(ch2);
 
         // move to the last node of the second list
-        while (reversedSecChain.getRight() != null){
+        while (reversedSecChain.getRight() != null) {
             reversedSecChain = reversedSecChain.getRight();
         }
 
@@ -273,7 +275,7 @@ public class TESTA {
         Node<Integer> resultTail = null;
 
         // continue while both pointers are valid
-        while (pos1 != null && pos2 != null){
+        while (pos1 != null && pos2 != null) {
 
             // get the current value from the first list
             var value1 = pos1.getValue();
@@ -289,7 +291,7 @@ public class TESTA {
 
             // if the result list is empty,
             // initialize the head and tail
-            if (resultTail == null){
+            if (resultTail == null) {
 
                 // set the first node as the head
                 resultHead = firstToAdd;
@@ -329,7 +331,7 @@ public class TESTA {
     // 3
     // 3
 
-    public static void q3(){
+    public static void q3() {
 
         // -----------------------------
         // Steering interface
@@ -382,32 +384,38 @@ public class TESTA {
 
             // constructor that receives
             // both model name and battery level
-            public AutonomousCar(String modelName, double batteryLevel) {}
+            public AutonomousCar(String modelName, double batteryLevel) {
+            }
 
 
             // constructor that receives
             // only the model name
-            public AutonomousCar(String modelName) {}
+            public AutonomousCar(String modelName) {
+            }
 
 
             // implementation of Sensing
             @Override
-            public void activateLidar() {}
+            public void activateLidar() {
+            }
 
 
             // implementation of Steering
             @Override
-            public void turnLeft() {}
+            public void turnLeft() {
+            }
 
 
             // implementation of Steering
             @Override
-            public void turnRight(int degrees) {}
+            public void turnRight(int degrees) {
+            }
 
 
             // implementation of Navigation
             @Override
-            public void setDestination(String dest) {}
+            public void setDestination(String dest) {
+            }
         }
 
 
@@ -442,7 +450,6 @@ public class TESTA {
             // s1.turnRight(45);
 
 
-
             // -----------------------------
             // 2 - WRONG
             // Compilation Error
@@ -458,7 +465,6 @@ public class TESTA {
 
             // Navigation n2 = new Navigation();
             // n2.setDestination("Tel Aviv");
-
 
 
             // -----------------------------
@@ -485,7 +491,6 @@ public class TESTA {
             //         (AutonomousCar)n3;
 
 
-
             // -----------------------------
             // 4 - WRONG
             // Compilation Error
@@ -509,7 +514,6 @@ public class TESTA {
             // n4.activateLidar();
 
 
-
             // -----------------------------
             // 5 - RIGHT
             // -----------------------------
@@ -531,7 +535,6 @@ public class TESTA {
             //         (Sensing)s5;
 
             // sn5.activateLidar();
-
 
 
             // -----------------------------
@@ -571,7 +574,7 @@ public class TESTA {
     // Time Complexity: O(n * m)
     // n = number of digits in num1
     // m = number of digits in num2
-    public static boolean areStrangers(int num1, int num2){
+    public static boolean areStrangers(int num1, int num2) {
         // convert the first number to a String
         var s1 = String.valueOf(num1);
 
@@ -619,7 +622,7 @@ public class TESTA {
     //
     // Space Complexity: O(n)
     // because two helper queues are used.
-    public static boolean isStrangersQueue(Queue<Integer> q){
+    public static boolean isStrangersQueue(Queue<Integer> q) {
 
         // external queue used to store elements
         // that were already fully checked
@@ -635,7 +638,7 @@ public class TESTA {
 
 
         // iterate through the queue
-        while (!q.isEmpty()){
+        while (!q.isEmpty()) {
 
             // remove the current element
             var current = q.poll();
@@ -647,7 +650,7 @@ public class TESTA {
 
             // compare the current element
             // with all remaining elements in the queue
-            while (!q.isEmpty()){
+            while (!q.isEmpty()) {
 
                 // remove the next element
                 var next = q.poll();
@@ -661,7 +664,7 @@ public class TESTA {
 
                 // if they are not strangers,
                 // set the flag to false
-                if (!areStrangers){
+                if (!areStrangers) {
                     allStrangers = false;
                 }
             }
@@ -669,7 +672,7 @@ public class TESTA {
 
             // restore all remaining elements
             // back into the original queue
-            while (!INTERNAL_RESTORE.isEmpty()){
+            while (!INTERNAL_RESTORE.isEmpty()) {
 
                 q.offer(INTERNAL_RESTORE.poll());
             }
@@ -678,7 +681,7 @@ public class TESTA {
 
         // restore all elements that were already checked
         // back into the original queue
-        while (!EXTERNAL_RESTORE.isEmpty()){
+        while (!EXTERNAL_RESTORE.isEmpty()) {
 
             q.offer(EXTERNAL_RESTORE.poll());
         }
@@ -690,7 +693,7 @@ public class TESTA {
     }
 
     // 5
-    public static void q5(){
+    public static void q5() {
         /*
         Inheritance Tree:
                        Object
@@ -890,24 +893,41 @@ public class TESTA {
     }
 
     // 6
-    public static void q6(){
+    public static void q6() {
         class SpecNode {
             private int value;
             private int numOfSmallers;
             private SpecNode next;
 
-            public SpecNode (int val) {
+            public SpecNode(int val) {
                 this.value = val;
-                this. numOfSmallers = 0;
+                this.numOfSmallers = 0;
                 this.next = null;
             }
 
-            public int getValue() { return value; }
-            public void setValue(int value) { this.value = value; }
-            public int getNumOfSmallers() { return numOfSmallers; }
-            public void setNumOfSmallers(int numOfSmallers) { this.numOfSmallers = numOfSmallers; }
-            public SpecNode getNext() { return next; }
-            public void setNext(SpecNode next) { this.next = next; }
+            public int getValue() {
+                return value;
+            }
+
+            public void setValue(int value) {
+                this.value = value;
+            }
+
+            public int getNumOfSmallers() {
+                return numOfSmallers;
+            }
+
+            public void setNumOfSmallers(int numOfSmallers) {
+                this.numOfSmallers = numOfSmallers;
+            }
+
+            public SpecNode getNext() {
+                return next;
+            }
+
+            public void setNext(SpecNode next) {
+                this.next = next;
+            }
         }
 
         // O(n)^2
@@ -949,7 +969,9 @@ public class TESTA {
                 while (p != null) {
                     // if the current value is smaller
                     // than the new node's value
-                    if (p.getValue() < val) { count++; }
+                    if (p.getValue() < val) {
+                        count++;
+                    }
                     // move to the next node
                     p = p.getNext();
                 }
@@ -1133,7 +1155,7 @@ public class TESTA {
                 }
 
                 // cast e to Intern
-                Intern other = (Intern)e;
+                Intern other = (Intern) e;
 
                 // return true only if both Intern objects
                 // have the same mentorId
@@ -1356,8 +1378,8 @@ public class TESTA {
 
     // 8
     // a
-    public static Node<Integer> first(Node<Integer> ch, int x){
-        if(ch == null) return new Node<Integer>(x);
+    public static Node<Integer> first(Node<Integer> ch, int x) {
+        if (ch == null) return new Node<Integer>(x);
         ch.setNext(first(ch.getNext(), x));
         return ch;
     }
@@ -1370,16 +1392,20 @@ public class TESTA {
     // add new node to the end of the list
 
     // b
-    public static Node<Integer> first_1(Node<Integer> ch, int x){
+    public static Node<Integer> first_1(Node<Integer> ch, int x) {
         // if the list is empty,
         // create and return a new node
-        if (ch == null) { return new Node<Integer>(x); }
+        if (ch == null) {
+            return new Node<Integer>(x);
+        }
 
         // keep the original head
         Node<Integer> head = ch;
 
         // move to the last node
-        while (ch.getNext() != null) { ch = ch.getNext(); }
+        while (ch.getNext() != null) {
+            ch = ch.getNext();
+        }
 
         // add the new node at the end
         ch.setNext(new Node<Integer>(x));
@@ -1464,7 +1490,9 @@ public class TESTA {
             // is exactly at the requested distance
             // add the current node's value
             // to the end of the linked list
-            else { list = first(list, bt.getValue()); }
+            else {
+                list = first(list, bt.getValue());
+            }
         }
 
         return list; // return the updated list
@@ -1545,7 +1573,9 @@ public class TESTA {
                 var currentBin = searchDeque.poll();
 
                 // if the current level list is empty, create its first node
-                if (neweyHead == null) { neweyHead = neweyTail = new Node<>(currentBin.getValue()); }
+                if (neweyHead == null) {
+                    neweyHead = neweyTail = new Node<>(currentBin.getValue());
+                }
                 // otherwise, add the current value to the end of the level list
                 else {
                     neweyTail.setNext(new Node<>(currentBin.getValue()));
@@ -1553,9 +1583,13 @@ public class TESTA {
                 }
 
                 // add the left child to the next BFS level
-                if (currentBin.getLeft() != null) { searchDeque.offer(currentBin.getLeft()); }
+                if (currentBin.getLeft() != null) {
+                    searchDeque.offer(currentBin.getLeft());
+                }
                 // add the right child to the next BFS level
-                if (currentBin.getRight() != null) { searchDeque.offer(currentBin.getRight()); }
+                if (currentBin.getRight() != null) {
+                    searchDeque.offer(currentBin.getRight());
+                }
             }
 
             // store the linked list that represents the current level
@@ -1615,25 +1649,54 @@ public class TESTA {
             }
 
             // returns the session name
-            public String getNameSession() { return this.nameSession; }
+            public String getNameSession() {
+                return this.nameSession;
+            }
+
             // updates the session name
-            public void setNameSession(String nameSession) { this.nameSession = nameSession; }
+            public void setNameSession(String nameSession) {
+                this.nameSession = nameSession;
+            }
+
             // returns the participants queue
-            public Queue<String> getParticipants() { return this.participants; }
+            public Queue<String> getParticipants() {
+                return this.participants;
+            }
+
             // updates the participants queue
-            public void setParticipants(Queue<String> participants) { this.participants = participants; }
+            public void setParticipants(Queue<String> participants) {
+                this.participants = participants;
+            }
+
             // returns the maximum capacity
-            public int getMaxCapacity() { return this.maxCapacity; }
+            public int getMaxCapacity() {
+                return this.maxCapacity;
+            }
+
             // updates the maximum capacity
-            public void setMaxCapacity(int maxCapacity) { this.maxCapacity = maxCapacity; }
+            public void setMaxCapacity(int maxCapacity) {
+                this.maxCapacity = maxCapacity;
+            }
+
             // returns the current number of participants
-            public int getNumParticipants() { return this.numParticipants; }
+            public int getNumParticipants() {
+                return this.numParticipants;
+            }
+
             // updates the current number of participants
-            public void setNumParticipants(int numParticipants) { this.numParticipants = numParticipants; }
+            public void setNumParticipants(int numParticipants) {
+                this.numParticipants = numParticipants;
+            }
+
             // returns true if the session is critical
-            public boolean getIsCritical() { return this.isCritical; }
+            public boolean getIsCritical() {
+                return this.isCritical;
+            }
+
             // updates the critical status of the session
-            public void setIsCritical(boolean isCritical) { this.isCritical = isCritical; }
+            public void setIsCritical(boolean isCritical) {
+                this.isCritical = isCritical;
+            }
 
             // 9 - b
             // Tries to register a participant to this session.
@@ -1652,9 +1715,9 @@ public class TESTA {
             //
             // Time Complexity: O(n)
             // Space Complexity: O(n)
-            public boolean registerParticipant(String name){
+            public boolean registerParticipant(String name) {
                 // check if the session is already full
-                if (this.numParticipants >= this.maxCapacity){
+                if (this.numParticipants >= this.maxCapacity) {
                     System.out.println("The session is full");
                     return false;
                 }
@@ -1665,20 +1728,24 @@ public class TESTA {
                 var temp = new LinkedList<String>();
 
                 // iterate through all participants
-                while (!this.participants.isEmpty()){
+                while (!this.participants.isEmpty()) {
                     // remove the current participant
                     var participant = this.participants.poll();
                     // check if this participant is already registered
-                    if (participant.equals(name)){ exist = true; }
+                    if (participant.equals(name)) {
+                        exist = true;
+                    }
                     // save the participant in the temporary queue
                     temp.offer(participant);
                 }
 
                 // restore the original participants queue
-                while (!temp.isEmpty()){ this.participants.offer(temp.poll()); }
+                while (!temp.isEmpty()) {
+                    this.participants.offer(temp.poll());
+                }
 
                 // if the participant already exists, registration is not allowed
-                if (exist){
+                if (exist) {
                     System.out.println("Participant is already registered to this session");
                     return false;
                 }
@@ -1709,13 +1776,24 @@ public class TESTA {
             private Node<Session> sessions;
 
             // returns the conference name
-            public String getNameConference() { return this.nameConference; }
+            public String getNameConference() {
+                return this.nameConference;
+            }
+
             // updates the conference name
-            public void setNameConference(String nameConference) { this.nameConference = nameConference; }
+            public void setNameConference(String nameConference) {
+                this.nameConference = nameConference;
+            }
+
             // returns the linked list of sessions
-            public Node<Session> getSessions() { return this.sessions; }
+            public Node<Session> getSessions() {
+                return this.sessions;
+            }
+
             // updates the linked list of sessions
-            public void setSessions(Node<Session> sessions) { this.sessions = sessions; }
+            public void setSessions(Node<Session> sessions) {
+                this.sessions = sessions;
+            }
 
             // 9 - c
             // This helper function checks whether a participant
@@ -1726,12 +1804,12 @@ public class TESTA {
             //
             // Returns false if the participant is already registered
             // in at least one critical session.
-            private boolean theParticipantIsNotRegisteredToAnyCriticalSession(String participant){
+            private boolean theParticipantIsNotRegisteredToAnyCriticalSession(String participant) {
                 // pointer used to iterate through the sessions linked list
                 var pos = this.sessions;
 
                 // iterate through all sessions
-                while(pos != null){
+                while (pos != null) {
                     // get the current session
                     var currentSession = pos.getValue();
                     // check whether the current session is critical
@@ -1739,7 +1817,7 @@ public class TESTA {
 
                     // if the current session is critical,
                     // check whether the participant is already registered in it
-                    if(isCritical){
+                    if (isCritical) {
                         // temporary queue used to restore the participants queue
                         var temp = new LinkedList<String>();
                         // flag that indicates whether the participant already exists
@@ -1748,12 +1826,12 @@ public class TESTA {
                         var participants = currentSession.getParticipants();
 
                         // iterate through all participants in the current session
-                        while (!participants.isEmpty()){
+                        while (!participants.isEmpty()) {
                             // remove the current participant from the queue
                             var currentParticipant = participants.poll();
 
                             // check whether this is the participant we are looking for
-                            if(currentParticipant.equals(participant)){
+                            if (currentParticipant.equals(participant)) {
                                 allreadyExists = true;
                             }
 
@@ -1763,11 +1841,15 @@ public class TESTA {
                         }
 
                         // restore the original participants queue
-                        while (!temp.isEmpty()){ participants.offer(temp.poll()); }
+                        while (!temp.isEmpty()) {
+                            participants.offer(temp.poll());
+                        }
 
                         // if the participant is already registered
                         // in a critical session, return false
-                        if(allreadyExists){ return false; }
+                        if (allreadyExists) {
+                            return false;
+                        }
                     }
 
                     // move to the next session
@@ -1791,12 +1873,12 @@ public class TESTA {
             //
             // Returns true if the registration succeeds.
             // Returns false otherwise.
-            public boolean tryRegister(String nameSession, String name){
+            public boolean tryRegister(String nameSession, String name) {
                 // pointer used to iterate through the sessions linked list
                 var pos = this.sessions;
 
                 // iterate through all sessions
-                while (pos != null){
+                while (pos != null) {
                     // get the current session
                     var currentSession = pos.getValue();
                     // get the current session name
@@ -1805,21 +1887,21 @@ public class TESTA {
                     var isCritical = currentSession.getIsCritical();
 
                     // if this is the desired session and it is critical
-                    if (isCritical && nameSession.equals(sessionName)){
+                    if (isCritical && nameSession.equals(sessionName)) {
                         // check whether the participant is already registered
                         // in another critical session
-                        if (!this.theParticipantIsNotRegisteredToAnyCriticalSession(name)){
+                        if (!this.theParticipantIsNotRegisteredToAnyCriticalSession(name)) {
                             System.out.println("Participant is already registered to a critical session");
                             return false;
                         }
                         // if the participant is allowed to register
                         // to this critical session
-                        else{
+                        else {
                             // try to register the participant
                             var isRegisterd = currentSession.registerParticipant(name);
 
                             // if registration succeeded, return true
-                            if (isRegisterd){
+                            if (isRegisterd) {
                                 System.out.println("The participant registered successfully to the desired session");
                                 return true;
                             }
@@ -1830,12 +1912,12 @@ public class TESTA {
                         }
                     }
                     // if this is the desired session and it is not critical
-                    else if (!isCritical && nameSession.equals(sessionName)){
+                    else if (!isCritical && nameSession.equals(sessionName)) {
                         // try to register the participant
                         var isRegistered = currentSession.registerParticipant(name);
 
                         // if registration succeeded, return true
-                        if (isRegistered){
+                        if (isRegistered) {
                             System.out.println("The participant registered successfully to the desired session");
                             return true;
                         }
@@ -1856,5 +1938,211 @@ public class TESTA {
                 return false;
             }
         }
+    }
+
+
+    // test b //
+
+    // Question 1 - a
+    // This helper function checks if a number
+    // exists in the given ArrayList.
+    // Time Complexity: O(n)
+    private static boolean ifNumInLs(ArrayList<Integer> arrlist, int num) {
+        // iterate through all elements in the list
+        for (int i = 0; i < arrlist.size(); i++) {
+            // if the number is found in the list, return true
+            if (arrlist.get(i) == num) {
+                return true;
+            }
+        }
+        // the number was not found
+        return false;
+    }
+
+
+    // This helper function receives a positive integer
+    // and returns a list containing all of its divisors,
+    // excluding 1.
+    // Time Complexity: O(n)
+    private static ArrayList<Integer> divList(int num) {
+        // create a list to store the divisors
+        var divList = new ArrayList<Integer>();
+
+        // start from 2 because 1 should not be counted
+        // and include num itself because num is also a divisor of itself
+        for (int i = 2; i <= num; i++) {
+            // check if i is a divisor of num
+            var div = num % i;
+            // if i is a divisor, add it to the list
+            if (div == 0) { divList.add(i); }
+        }
+
+        // return the list of divisors
+        return divList;
+    }
+
+
+    // This function receives two positive integers.
+    // Two numbers are "crossed" if they have exactly
+    // one common divisor, excluding 1.
+    // Returns true if they are crossed,
+    // otherwise returns false.
+    public static boolean crossed(int num1, int num2) {
+        // create lists containing the divisors
+        // of both numbers, excluding 1
+        var num1DivList = divList(num1);
+        var num2DivList = divList(num2);
+        // counter for the number of common divisors
+        var counter = 0;
+
+        // iterate through all divisors of num1
+        for (int i = 0; i < num1DivList.size(); i++) {
+            // check if the current divisor
+            // is also a divisor of num2
+            if (ifNumInLs(num2DivList, num1DivList.get(i))) {
+                counter++;
+            }
+        }
+
+        // the numbers are crossed only if
+        // they have exactly one common divisor
+        return counter == 1;
+    }
+
+    // This function receives two stacks of positive integers.
+    // It checks whether every element in stk1 has at least one
+    // crossed element in stk2.
+    // The function preserves both stacks.
+    // Returns true if every element in stk1 has a crossed element in stk2.
+    // Returns false if at least one element in stk1 has no crossed element in stk2.
+    // Time Complexity: O(n * m * crossedCost)
+    // If crossed() is considered O(1): O(n * m)
+    // Space Complexity: O(n + m)
+    public static boolean crossedStacks(Stack<Integer> stk1, Stack<Integer> stk2) {
+        // if one of the stacks is empty,
+        // the required condition cannot be satisfied
+        if (stk1.empty() || stk2.empty()) { return false; }
+        // temporary stack used to restore stk1
+        var FIRSTSTACK_RESTORATION = new Stack<Integer>();
+        // temporary stack used to restore stk2
+        var SECSTACK_RESTORATION = new Stack<Integer>();
+
+        // iterate through every element in stk1
+        while (!stk1.empty()) {
+            // remove the current element from stk1
+            var currentValue1 = stk1.pop();
+            // save the current element so stk1 can be restored later
+            FIRSTSTACK_RESTORATION.push(currentValue1);
+
+            // flag that indicates whether a crossed element
+            // was found in stk2 for currentValue1
+            var isCrossed = false;
+
+            // search for a crossed element in stk2
+            while (!stk2.empty()) {
+                // remove the current element from stk2
+                var currentValue2 = stk2.pop();
+                // save the element so stk2 can be restored later
+                SECSTACK_RESTORATION.push(currentValue2);
+                // check whether the two current values are crossed
+                isCrossed = crossed(currentValue1, currentValue2);
+                // once a crossed element is found,
+                // there is no need to continue searching in stk2
+                if (isCrossed) break;
+            }
+
+            // if no crossed element was found in stk2
+            // for the current element from stk1
+            if (!isCrossed) {
+                // move all remaining elements from stk1
+                // to the restoration stack before restoring stk1
+                while (!stk1.empty()) { FIRSTSTACK_RESTORATION.push(stk1.pop()); }
+                // restore stk1 to its original state
+                while (!FIRSTSTACK_RESTORATION.empty()) { stk1.push(FIRSTSTACK_RESTORATION.pop()); }
+                // restore stk2 to its original state
+                while (!SECSTACK_RESTORATION.empty()) { stk2.push(SECSTACK_RESTORATION.pop()); }
+                // at least one element in stk1
+                // has no crossed element in stk2
+                return false;
+            }
+
+            // restore stk2 before checking
+            // the next element from stk1
+            while (!SECSTACK_RESTORATION.empty()) { stk2.push(SECSTACK_RESTORATION.pop()); }
+        }
+
+        // restore stk1 to its original state
+        while (!FIRSTSTACK_RESTORATION.empty()) { stk1.push(FIRSTSTACK_RESTORATION.pop()); }
+        // every element in stk1 has at least
+        // one crossed element in stk2
+        return true;
+    }
+
+    // 2
+    // Question 2 - a
+    // This function receives two queues of integers.
+    // It checks whether every value that appears in q1
+    // also appears somewhere in q2.
+    // Returns true if all values from q1 exist in q2.
+    // Returns false if at least one value from q1
+    // does not exist in q2.
+    // Time Complexity: O(n * m)
+    // n = number of elements in q1
+    // m = number of elements in q2
+    // Space Complexity: O(1)
+    // The queues are not modified.
+    public static boolean allFromQ1InQ2(Queue<Integer> q1, Queue<Integer> q2){
+        // flag that indicates whether at least one value
+        // from q1 was not found in q2
+        var somthingOff = new AtomicBoolean(false);
+
+        // iterate through every value in q1
+        q1.forEach(num1 -> {
+            // flag that indicates whether the current
+            // value from q1 was found in q2
+            var found = new AtomicBoolean(false);
+            // search for num1 inside q2
+            q2.forEach(num2 -> {
+                // if the values are equal,
+                // mark the current value as found
+                if (num1.equals(num2)) { found.set(true); }
+            });
+
+            // if the current value from q1 was not found in q2,
+            // mark the entire result as invalid
+            if (!found.get()) { somthingOff.set(true); }
+        });
+
+        // return true only if every value from q1
+        // was found somewhere in q2
+        return !somthingOff.get();
+    }
+
+    // Returns the first index of num in the queue.
+    // Returns -1 if num does not exist in the queue.
+    private static int indexOfNumInQueue(Queue<Integer> q, Integer num){
+        // current index while iterating through the queue
+        var index = new AtomicInteger(0);
+        // stores the first index where num was found
+        // -1 means that the number was not found
+        var finalIndex = new AtomicInteger(-1);
+        // flag that prevents changing finalIndex
+        // after the first occurrence was found
+        var found = new AtomicBoolean(false);
+
+        // iterate through all elements in the queue
+        q.forEach(n -> {
+            // save only the first occurrence of num
+            if (n.equals(num) && !found.get()){
+                finalIndex.set(index.get());
+                found.set(true);
+            }
+            // move to the next index
+            index.getAndIncrement();
+        });
+
+        // return the first index of num,
+        // or -1 if num does not exist
+        return finalIndex.get();
     }
 }
